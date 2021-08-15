@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "build",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "jsx": "react",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "strict": true,
+    "paths": {
+      "*": ["src/*"],
+      "react": ["../node_modules/preact/compat"],
+      "react-dom": ["../node_modules/preact/compat"],
+    }
+  },
+  "include": ["module.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "build"]
+}

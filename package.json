@@ -1,0 +1,60 @@
+{
+  "name": "email-blaze",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client-web",
+    "server-api"
+  ],
+  "scripts": {
+    "bootstrap": "yarn install",
+    "clear:build": "rimraf */build",
+    "clear": "rimraf node_modules */node_modules && yarn run clear:build",
+    "lint:es": "eslint . --ext ts --ext tsx --ext js --fix",
+    "lint:format": "prettier --write .",
+    "start": "yarn workspace server-api run dev:build && concurrently -n web,api -c blue,cyan \"yarn workspace client-web run dev\" \"yarn workspace server-api run dev:run\""
+  },
+  "devDependencies": {
+    "@commitlint/cli": "13.1.0",
+    "@commitlint/config-conventional": "13.1.0",
+    "@typescript-eslint/eslint-plugin": "4.29.1",
+    "@typescript-eslint/parser": "4.29.1",
+    "concurrently": "6.2.1",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-react": "7.24.0",
+    "husky": "7.0.1",
+    "lint-staged": "11.1.2",
+    "prettier": "2.3.2",
+    "rimraf": "3.0.2",
+    "typescript": "4.3.5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md,html,yml}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "useTabs": false
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}
