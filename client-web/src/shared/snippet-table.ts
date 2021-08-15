@@ -1,5 +1,6 @@
 import { pool, shared, value } from 'realar'
 import { sharedAuth } from './auth'
+import { sharedNotifier } from './notifier';
 import { sharedServerApi, SnippetsParams } from './server-api';
 
 export type Snippet = {
@@ -38,6 +39,11 @@ const SnippetTable = () => {
       table.reset();
       page.reset();
       pages.reset();
+      return;
+    }
+
+    if (!res.snippets) {
+      sharedNotifier().error('You may not have specified permission to read your emails, or something went wrong 😞');
       return;
     }
 

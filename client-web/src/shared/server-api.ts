@@ -55,9 +55,9 @@ const ServerApi = () => {
     async snippets(params: SnippetsParams) {
       const data = await authorized('/user/snippets', params);
       if (!data) return;
-      const snippets: string[] = data.snippets;
-      const pages: number = data.pages;
-      const page: number = data.page;
+      const snippets: string[] | void = data.snippets;
+      const pages: number = data.pages || 0;
+      const page: number = data.page || 0;
 
       return {
         snippets,
