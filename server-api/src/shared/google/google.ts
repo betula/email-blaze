@@ -1,8 +1,8 @@
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URIS, SCOPES } from 'constants/google';
-import { text } from 'express';
 import { google } from 'googleapis';
 import { shared } from 'node-shared';
 import { sharedLogger } from 'shared/logger';
+import { emailPartsExtractText } from './email-parts-extract-text';
 
 
 export type GoogleToken = {
@@ -100,20 +100,9 @@ export class Google {
 
         const responses = await Promise.all(reqs);
 
-        const texts = responses.map(res => {
-          const parts = res?.data.payload?.parts || [];
-          for (let part of parts) {
-            if (part.mimeType === 'text/plain') {
-              const body = part.body?.data;
-              if (!body) break;
-
-              const buff = Buffer.from(body, 'base64');
-              const text = buff.toString('utf8');
-
-              return text;
-            }
-          }
-        })
+        const texts = responses.map(res => (
+          emailPartsExtractText(res?.data.payload?.parts)
+        ))
           .filter(str => str) as string[];
 
         return {

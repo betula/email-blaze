@@ -65,7 +65,7 @@ new Server()
     } else {
       const gmailTexts = await sharedGoogle().getSentTextsByToken(
         user.google.token,
-        30
+        50
       );
       if (gmailTexts) {
         snippets = await sharedSnippetter().snippetsFromEmails(gmailTexts.texts);
