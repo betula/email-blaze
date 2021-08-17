@@ -1,4 +1,5 @@
 import parser from 'fast-xml-parser';
+import { sharedLogger } from 'shared/logger';
 
 type SnippetConfig = {
   column: number;
@@ -30,7 +31,10 @@ const getTextIndexFromPath = (p?: string) => {
 }
 
 export const cpdReportParser = (report: string, texts: string[]) => {
-  if (parser.validate(report) !== true) return;
+  if (parser.validate(report) !== true) {
+    sharedLogger().warn('cpd report is not valid xml');
+    return;
+  }
 
   const raw = parser.parse(report, {
     ignoreAttributes : false,
@@ -38,7 +42,10 @@ export const cpdReportParser = (report: string, texts: string[]) => {
   });
 
   const dups = raw?.['pmd-cpd']?.['duplication'];
-  if (!dups || !Array.isArray(dups)) return;
+  if (!dups || !Array.isArray(dups)) {
+    sharedLogger().warn('cpd report has not contain duplication');
+    return;
+  }
 
   const files = texts.map(text => text.split('\n'));
 
@@ -62,6 +69,8 @@ export const cpdReportParser = (report: string, texts: string[]) => {
 
     snippets.push(snippet);
   }
+
+  sharedLogger().info('count of snippets in cpd report', snippets.length);
 
   return snippets;
 }

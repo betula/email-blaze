@@ -63,7 +63,10 @@ const cmd = async (directory: string, texts: string[]) => {
 
 export const cpdRun = async (texts: string[]) => {
   const directory = await createDirWithTexts(texts);
-  if (!directory) return;
+  if (!directory) {
+    sharedLogger().error('No possible to create tmp directory for cpd texts');
+    return;
+  }
 
   try {
     return await cmd(directory, texts);

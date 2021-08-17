@@ -85,6 +85,7 @@ export class Google {
       });
       const messages = res?.data?.messages;
       if (messages) {
+        this.logger.info('count of gmail messages', messages.length);
 
         const reqs = messages.map(async (message) => {
           try {
@@ -105,9 +106,13 @@ export class Google {
         ))
           .filter(str => str) as string[];
 
+        this.logger.info('count of text parts from gmail messages', texts.length);
+
         return {
           texts
         }
+      } else {
+        this.logger.warn('No have messages in gmail messages list');
       }
     } catch (err) {
       this.logger.error('Error retrieving user sent emails by access token', err);

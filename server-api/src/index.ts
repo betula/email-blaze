@@ -2,6 +2,7 @@ import { WEB_CLIENT_URL } from 'constants/web';
 import { Server } from 'lib/server';
 import { sharedAuth } from 'shared/auth';
 import { sharedGoogle } from 'shared/google';
+import { sharedLogger } from 'shared/logger';
 import { sharedSnippetter } from 'shared/snippetter';
 import { sharedUserStorage } from 'shared/user-storage';
 
@@ -76,8 +77,11 @@ new Server()
     }
 
     if (!snippets) {
+      sharedLogger().warn('no have snippets');
       res.send({});
       return;
+    } else {
+      sharedLogger().info('count of snippets', snippets.length);
     }
 
     const slice = snippets.slice(pageIndex * pageLimit, (pageIndex + 1) * pageLimit);
@@ -97,4 +101,3 @@ new Server()
   })
 
   .start();
-

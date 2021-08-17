@@ -1,4 +1,5 @@
 import { shared } from 'node-shared';
+import { sharedLogger } from 'shared/logger';
 import { clearifyEmailText } from './clearify-email-text';
 import { cpdReportParser } from './cpd-report-parser';
 import { cpdRun } from './cpd-runner';
@@ -12,8 +13,15 @@ export class Snippetter {
       .map(clearifyEmailText)
       .filter(text => text);
 
+    sharedLogger().info('count of texts for cpd', texts.length);
+
     const report = await cpdRun(texts);
-    if (!report) return;
+
+
+    if (!report) {
+      sharedLogger().warn('no have report from cpd');
+      return;
+    }
 
     return splitLongSnippets(
       cpdReportParser(report, texts)
