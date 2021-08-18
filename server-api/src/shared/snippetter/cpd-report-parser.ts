@@ -46,7 +46,7 @@ export const cpdReportParser = (report: string, texts: string[]) => {
   let dups = raw?.['pmd-cpd']?.['duplication'];
   if (!dups) {
     sharedLogger().warn('cpd report has not contain duplication');
-    return;
+    return [];
   }
 
   if (!Array.isArray(dups)) dups = [dups];
