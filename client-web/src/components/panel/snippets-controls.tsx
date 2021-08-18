@@ -28,12 +28,16 @@ export const SnippetsControls: FC<Props> = ({ variant }) => {
 
   return (
     <div className={classes.root}>
-      <IconButton onClick={loadPrev} disabled={load.pending.val || !hasPrev()}>
-        <ChevronLeft />
-      </IconButton>
-      <IconButton onClick={loadNext} disabled={load.pending.val || !hasNext()}>
-        <ChevronRight />
-      </IconButton>
+      {hasPrev() ? (
+        <Button onClick={loadPrev} disabled={load.pending.val}>
+          <ChevronLeft /> PREV PAGE
+        </Button>
+      ): null}
+      {hasNext() ? (
+        <Button onClick={loadNext} disabled={load.pending.val}>
+          NEXT PAGE <ChevronRight />
+        </Button>
+      ): null}
 
       <div class={classes.space} />
 

@@ -53,7 +53,7 @@ new Server()
     }
 
     const query = req.query;
-    const pageLimit = parseInt(''+query?.limit) || 10;
+    const pageLimit = parseInt(''+query?.limit) || 30;
     const isRefresh = parseInt(''+query?.refresh) || 0;
     const pageIndex = isRefresh
       ? 0

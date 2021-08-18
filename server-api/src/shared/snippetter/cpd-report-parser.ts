@@ -1,5 +1,7 @@
 import parser from 'fast-xml-parser';
 
+const MAX_LEN_SNIPPET = 400;
+
 type SnippetConfig = {
   column: number;
   endcolumn: number;
@@ -42,9 +44,10 @@ export const cpdReportParser = (report: string, texts: string[]) => {
 
   const files = texts.map(text => text.split('\n'));
 
-  const snippets = [];
+  const snippets = [] as [number, string][];
 
   for (let dup of dups) {
+    const count = dup?.file?.length || 0;
     const info = dup?.file?.[0];
     if (!info) continue;
 
@@ -60,8 +63,14 @@ export const cpdReportParser = (report: string, texts: string[]) => {
     const snippet = extractSnippet(files[index], config);
     if (!snippet) continue;
 
-    snippets.push(snippet);
+    // to cut potential copies of messages
+    if (snippet.length > MAX_LEN_SNIPPET) continue;
+
+    snippets.push([count, snippet]);
   }
 
-  return snippets;
+  // sort by frequency
+  snippets.sort(([a], [b]) => b - a);
+
+  return snippets.map(([_len, text]) => text);
 }
