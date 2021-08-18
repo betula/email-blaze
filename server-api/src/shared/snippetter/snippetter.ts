@@ -8,21 +8,25 @@ import { cpdRun } from './cpd-runner';
 export class Snippetter {
 
   async snippetsFromEmails(rawTexts: string[]) {
-    const texts = rawTexts
-      .map(clearifyEmailText)
-      .filter(text => text);
+    try {
+      const texts = rawTexts
+        .map(clearifyEmailText)
+        .filter(text => text);
 
-    sharedLogger().info('count of texts for cpd', texts.length);
+      sharedLogger().info('count of texts for cpd', texts.length);
 
-    const report = await cpdRun(texts);
+      const report = await cpdRun(texts);
+      sharedLogger().info('report ready');
 
+      if (!report) {
+        sharedLogger().warn('no have report from cpd');
+        return;
+      }
 
-    if (!report) {
-      sharedLogger().warn('no have report from cpd');
-      return;
+      return cpdReportParser(report, texts);
+    } catch (err) {
+      sharedLogger().error('Error during snippets from emails', err);
     }
-
-    return cpdReportParser(report, texts);
   }
 
 }
