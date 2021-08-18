@@ -40,7 +40,7 @@ export const cpdReportParser = (report: string, texts: string[]) => {
   });
 
   let dups = raw?.['pmd-cpd']?.['duplication'];
-  if (!dups) return;
+  if (!dups) return [];
 
   if (!Array.isArray(dups)) dups = [dups];
 
